@@ -393,10 +393,10 @@ const loanCalc = {
         
         scheduleHTML += `<tr>
           <td>${i}</td>
-          <td>${Math.round(monthlyPayment).toLocaleString()}원</td>
-          <td>${Math.round(principal).toLocaleString()}원</td>
-          <td>${Math.round(interest).toLocaleString()}원</td>
-          <td>${Math.round(currentP).toLocaleString()}원</td>
+          <td>${Math.round(monthlyPayment).toLocaleString()}</td>
+          <td>${Math.round(principal).toLocaleString()}</td>
+          <td>${Math.round(interest).toLocaleString()}</td>
+          <td>${Math.round(currentP).toLocaleString()}</td>
         </tr>`;
       }
     } else if (type === 'equal_prn') {
@@ -414,10 +414,10 @@ const loanCalc = {
         
         scheduleHTML += `<tr>
           <td>${i}</td>
-          <td>${Math.round(monthlyPayment).toLocaleString()}원</td>
-          <td>${Math.round(monthlyPrincipal).toLocaleString()}원</td>
-          <td>${Math.round(interest).toLocaleString()}원</td>
-          <td>${Math.round(currentP).toLocaleString()}원</td>
+          <td>${Math.round(monthlyPayment).toLocaleString()}</td>
+          <td>${Math.round(monthlyPrincipal).toLocaleString()}</td>
+          <td>${Math.round(interest).toLocaleString()}</td>
+          <td>${Math.round(currentP).toLocaleString()}</td>
         </tr>`;
       }
     } else if (type === 'bullet') {
@@ -434,10 +434,10 @@ const loanCalc = {
         
         scheduleHTML += `<tr>
           <td>${i}</td>
-          <td>${Math.round(monthlyPayment).toLocaleString()}원</td>
-          <td>${Math.round(principal).toLocaleString()}원</td>
-          <td>${Math.round(interest).toLocaleString()}원</td>
-          <td>${Math.round(currentP).toLocaleString()}원</td>
+          <td>${Math.round(monthlyPayment).toLocaleString()}</td>
+          <td>${Math.round(principal).toLocaleString()}</td>
+          <td>${Math.round(interest).toLocaleString()}</td>
+          <td>${Math.round(currentP).toLocaleString()}</td>
         </tr>`;
       }
     }
