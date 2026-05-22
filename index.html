@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartCalc - 다기능 스마트 계산기</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 사이드바 / 네비게이션 -->
+    <nav class="sidebar">
+      <div class="logo">
+        <span class="icon">✨</span>
+        <h1>SmartCalc</h1>
+      </div>
+      <ul class="nav-links">
+        <li class="active" data-target="calc-basic"><span class="icon">🔢</span> 기본 계산기</li>
+        <li data-target="calc-date"><span class="icon">📅</span> 날짜 계산기</li>
+        <li data-target="calc-exchange"><span class="icon">💱</span> 환율 계산기</li>
+        <li data-target="calc-area"><span class="icon">🏠</span> 평수 계산기</li>
+        <li data-target="calc-loan"><span class="icon">💰</span> 대출 상환</li>
+        <li data-target="calc-bmi"><span class="icon">⚖️</span> BMI 계산기</li>
+        <li data-target="calc-salary"><span class="icon">💵</span> 연봉 계산기</li>
+      </ul>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="main-content">
+      <!-- 1. 기본 계산기 -->
+      <section id="calc-basic" class="calc-section active">
+        <header>
+          <h2>기본 계산기</h2>
+          <p>사칙연산 및 백분율을 쉽게 계산하세요.</p>
+        </header>
+        <div class="calc-card glassmorphism">
+          <div class="display">
+            <div class="history-display" id="basic-history-display"></div>
+            <div class="main-display" id="basic-display">0</div>
+          </div>
+          <div class="keypad">
+            <button class="btn clear" onclick="basicCalc.clearAll()">AC</button>
+            <button class="btn operator" onclick="basicCalc.deleteLast()">C</button>
+            <button class="btn operator" onclick="basicCalc.appendOperator('%')">%</button>
+            <button class="btn operator" onclick="basicCalc.appendOperator('/')">÷</button>
+
+            <button class="btn number" onclick="basicCalc.appendNumber('7')">7</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('8')">8</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('9')">9</button>
+            <button class="btn operator" onclick="basicCalc.appendOperator('*')">×</button>
+
+            <button class="btn number" onclick="basicCalc.appendNumber('4')">4</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('5')">5</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('6')">6</button>
+            <button class="btn operator" onclick="basicCalc.appendOperator('-')">-</button>
+
+            <button class="btn number" onclick="basicCalc.appendNumber('1')">1</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('2')">2</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('3')">3</button>
+            <button class="btn operator" onclick="basicCalc.appendOperator('+')">+</button>
+
+            <button class="btn number span-2" onclick="basicCalc.appendNumber('0')">0</button>
+            <button class="btn number" onclick="basicCalc.appendNumber('.')">.</button>
+            <button class="btn equal primary" onclick="basicCalc.calculate()">=</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 날짜 계산기 -->
+      <section id="calc-date" class="calc-section">
+        <header>
+          <h2>날짜 계산기</h2>
+          <p>D-day 및 기념일을 관리하세요.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="dateCalc.switchTab('dday')">D-day 계산</button>
+            <button class="tab-btn" onclick="dateCalc.switchTab('diff')">날짜 차이</button>
+          </div>
+          
+          <div id="date-dday-tab" class="tab-content active">
+            <div class="input-group">
+              <label>기준일</label>
+              <input type="date" id="date-base" onchange="dateCalc.calcDday()">
+            </div>
+            <div class="input-group">
+              <label>계산할 일수 (+/-)</label>
+              <input type="number" id="date-days" placeholder="예: 100" oninput="dateCalc.calcDday()">
+            </div>
+            <div class="result-box mt-4" id="date-dday-result" style="display: none;">
+              <div class="result-title">계산된 날짜</div>
+              <div class="result-value" id="date-dday-value" style="font-size: 1.8rem;">-</div>
+            </div>
+          </div>
+          
+          <div id="date-diff-tab" class="tab-content" style="display: none;">
+            <div class="input-group">
+              <label>시작일</label>
+              <input type="date" id="date-start" onchange="dateCalc.calcDiff()">
+            </div>
+            <div class="input-group">
+              <label>종료일</label>
+              <input type="date" id="date-end" onchange="dateCalc.calcDiff()">
+            </div>
+            <div class="result-box mt-4" id="date-diff-result" style="display: none;">
+              <div class="result-title">두 날짜의 차이</div>
+              <div class="result-value" id="date-diff-value">-</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 환율 계산기 -->
+      <section id="calc-exchange" class="calc-section">
+        <header>
+          <h2>환율 계산기</h2>
+          <p>실시간 환율 변환 정보를 제공합니다.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="quick-btns mb-4">
+            <button class="btn-quick" onclick="exchangeCalc.setFrom('KRW')">🇰🇷 한국 원</button>
+            <button class="btn-quick" onclick="exchangeCalc.setFrom('USD')">🇺🇸 미국 달러</button>
+            <button class="btn-quick" onclick="exchangeCalc.setFrom('JPY')">🇯🇵 일본 엔</button>
+            <button class="btn-quick" onclick="exchangeCalc.setFrom('EUR')">🇪🇺 유로</button>
+          </div>
+          <div class="input-group">
+            <label>금액 및 통화 (From)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="exchange-amount" placeholder="금액 입력" value="1000" oninput="exchangeCalc.calculate()">
+              <select id="exchange-from" onchange="exchangeCalc.calculate()" style="width: 100px; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB;">
+                <option value="KRW">KRW</option>
+                <option value="USD">USD</option>
+                <option value="JPY">JPY</option>
+                <option value="EUR">EUR</option>
+                <option value="CNY">CNY</option>
+              </select>
+            </div>
+          </div>
+          <div class="icon-swap">⬇</div>
+          <div class="input-group">
+            <label>변환된 통화 (To)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="exchange-result" placeholder="결과" readonly style="background: var(--btn-operator-bg); font-weight: bold; color: var(--primary);">
+              <select id="exchange-to" onchange="exchangeCalc.calculate()" style="width: 100px; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB;">
+                <option value="USD" selected>USD</option>
+                <option value="KRW">KRW</option>
+                <option value="JPY">JPY</option>
+                <option value="EUR">EUR</option>
+                <option value="CNY">CNY</option>
+              </select>
+            </div>
+          </div>
+          <div id="exchange-info" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 12px;">환율 정보를 불러오는 중...</div>
+        </div>
+      </section>
+
+      <!-- 4. 부동산 평수 계산기 -->
+      <section id="calc-area" class="calc-section">
+        <header>
+          <h2>부동산 평수 계산기</h2>
+          <p>제곱미터(㎡)와 평(坪)을 상호 변환합니다.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="quick-btns mb-4">
+            <button class="btn-quick" onclick="areaCalc.setArea(59)">59㎡ (약 18평)</button>
+            <button class="btn-quick" onclick="areaCalc.setArea(84)">84㎡ (약 25평)</button>
+            <button class="btn-quick" onclick="areaCalc.setArea(114)">114㎡ (약 34평)</button>
+          </div>
+          <div class="input-group">
+            <label>제곱미터 (㎡)</label>
+            <input type="number" id="area-sqm" placeholder="0" oninput="areaCalc.convertToPyeong()">
+          </div>
+          <div class="icon-swap">↔</div>
+          <div class="input-group">
+            <label>평 (坪)</label>
+            <input type="number" id="area-pyeong" placeholder="0" oninput="areaCalc.convertToSqm()">
+          </div>
+          <button class="btn primary w-100 mt-4" onclick="areaCalc.clear()">초기화</button>
+        </div>
+      </section>
+
+      <!-- 5. 이자 및 대출 상환 계산기 -->
+      <section id="calc-loan" class="calc-section">
+        <header>
+          <h2>이자 및 대출 상환 계산기</h2>
+          <p>원리금/원금 균등 상환액을 확인하세요.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="input-group">
+            <label>대출 금액 (원)</label>
+            <input type="number" id="loan-amount" placeholder="예: 100000000">
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="input-group" style="flex: 1;">
+              <label>연 이자율 (%)</label>
+              <input type="number" id="loan-rate" placeholder="예: 4.5" step="0.1">
+            </div>
+            <div class="input-group" style="flex: 1;">
+              <label>대출 기간 (개월)</label>
+              <input type="number" id="loan-months" placeholder="예: 120">
+            </div>
+          </div>
+          <div class="input-group">
+            <label>상환 방식</label>
+            <select id="loan-type" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB;">
+              <option value="equal_pmt">원리금균등상환</option>
+              <option value="equal_prn">원금균등상환</option>
+              <option value="bullet">만기일시상환</option>
+            </select>
+          </div>
+          <button class="btn primary w-100 mt-4" onclick="loanCalc.calculate()">계산하기</button>
+          
+          <div class="result-box mt-4" id="loan-result-box" style="display: none;">
+            <div class="result-title">1회차 상환예상금액</div>
+            <div class="result-value" id="loan-monthly-payment" style="font-size: 2rem;">0원</div>
+            <div class="result-desc" id="loan-total-interest" style="font-size: 0.9rem; font-weight: normal; margin-top: 8px;">총 이자: 0원</div>
+          </div>
+          <div id="loan-table-container" style="display: none; margin-top: 20px; max-height: 250px; overflow-y: auto; border-radius: 8px; border: 1px solid #E5E7EB; background: white;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>회차</th>
+                  <th>상환금액</th>
+                  <th>납입원금</th>
+                  <th>이자</th>
+                  <th>잔금</th>
+                </tr>
+              </thead>
+              <tbody id="loan-table-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. BMI 계산기 -->
+      <section id="calc-bmi" class="calc-section">
+        <header>
+          <h2>BMI 계산기</h2>
+          <p>신장과 체중을 통해 체질량지수를 계산합니다.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="input-group">
+            <label>신장 (cm)</label>
+            <input type="number" id="bmi-height" placeholder="예: 175">
+          </div>
+          <div class="input-group">
+            <label>체중 (kg)</label>
+            <input type="number" id="bmi-weight" placeholder="예: 70">
+          </div>
+          <button class="btn primary w-100 mt-4" onclick="bmiCalc.calculate()">계산하기</button>
+          
+          <div class="result-box mt-4" id="bmi-result-box" style="display: none;">
+            <div class="result-title">나의 BMI 지수</div>
+            <div class="result-value" id="bmi-value">22.9</div>
+            <div class="result-desc" id="bmi-status">정상체중</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. 연봉 및 실수령액 계산기 -->
+      <section id="calc-salary" class="calc-section">
+        <header>
+          <h2>연봉 및 실수령액 계산기</h2>
+          <p>예상 월 실수령액을 빠르게 확인하세요.</p>
+        </header>
+        <div class="calc-card glassmorphism form-card">
+          <div class="input-group">
+            <label>연봉 (원)</label>
+            <input type="number" id="salary-amount" placeholder="예: 50000000">
+          </div>
+          <div class="input-group">
+            <label>비과세액 (원/월)</label>
+            <input type="number" id="salary-nontax" placeholder="예: 200000" value="200000">
+          </div>
+          <button class="btn primary w-100 mt-4" onclick="salaryCalc.calculate()">계산하기</button>
+          
+          <div class="result-box mt-4" id="salary-result-box" style="display: none;">
+            <div class="result-title">예상 월 실수령액</div>
+            <div class="result-value" id="salary-monthly-net" style="font-size: 2rem;">0원</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); text-align: left; margin-top: 12px; background: rgba(255,255,255,0.5); padding: 12px; border-radius: 8px;">
+              <div>국민연금: <span id="salary-pension" style="float: right;">0원</span></div>
+              <div>건강보험: <span id="salary-health" style="float: right;">0원</span></div>
+              <div>고용보험: <span id="salary-employment" style="float: right;">0원</span></div>
+              <div>소득세: <span id="salary-tax" style="float: right;">0원</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+    
+    <!-- 우측 패널 (히스토리) -->
+    <aside class="history-panel">
+      <h3><span class="icon">🕒</span> 히스토리</h3>
+      <div id="history-list" class="history-list">
+        <!-- 최근 기록들이 동적으로 추가됩니다 -->
+      </div>
+      <button class="btn-clear-history" onclick="historyManager.clearHistory()">기록 삭제</button>
+    </aside>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
